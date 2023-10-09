@@ -36,7 +36,7 @@ public class UserRepositoryImpl implements UserRepository {
         User userPatch = users.get(userId);
 
         for (User userCheck : users.values()) {
-            if (userCheck.getEmail().equals(user.getEmail()) && userCheck.getId() != userId) { // !! ДОП УСЛОВИЕ !!
+            if (userCheck.getEmail().equals(user.getEmail()) && !userCheck.getId().equals(userId)) { // !! ДОП УСЛОВИЕ !!
                 throw new ValidationException("Этот email уже используется.");
             }
         }
