@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -20,7 +19,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     private Map<Integer, Item> items = new HashMap<>();
 
-    private Integer Id = 1;
+    private Integer id = 1;
 
     @Autowired
     public ItemRepositoryImpl(UserService userService) {
@@ -35,7 +34,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-        item.setId(Id++);
+        item.setId(id++);
         item.setOwner(userService.userById(userId));
         items.put(item.getId(), item);
         return item;
@@ -43,31 +42,26 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item patchItem(Item item, Integer itemId, Integer userId) { // для item update set unvaliable и item update set valiable 2 проверки
-
-        if (userId == null) {
-            throw new ValidationException("Пользователь не может быть null");
+        if (userId == null) {  // 1 !!!
+            throw new NotFoundException("Пользователь не может быть null");
         }
 
-        try {
-            Item itemPatch = itemById(itemId);
+        Item itemPatch = items.get(itemId);
 
-            if (!itemPatch.getOwner().getId().equals(userId)) {    // !!
-                throw new NotFoundException("У предмета другой владелец.");
-            }
-            if (item.getName() != null) {
-                itemPatch.setName(item.getName());
-            }
-            if (item.getDescription() != null) {
-                itemPatch.setDescription(item.getDescription());
-            }
-            if (item.getAvailable() != null) {
-                itemPatch.setAvailable(item.getAvailable());
-            }
-            items.put(itemPatch.getId(), itemPatch);
-            return itemPatch;
-        } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        if (!itemPatch.getOwner().getId().equals(userId)) {    // 2 !!!
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        if (item.getName() != null) {
+            itemPatch.setName(item.getName());
+        }
+        if (item.getDescription() != null) {
+            itemPatch.setDescription(item.getDescription());
+        }
+        if (item.getAvailable() != null) {
+            itemPatch.setAvailable(item.getAvailable());
+        }
+        items.put(itemId, itemPatch);
+        return itemPatch;
     }
 
 
@@ -94,14 +88,14 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<Item> search(String text, Integer userId) {
-        if (text.isBlank()) return Collections.emptyList();
+        if (text.isBlank()) {
+            return Collections.emptyList();
+        }
         return items.values()
                 .stream()
+                .filter(item -> item.getDescription().toLowerCase().contains(text.toLowerCase())
+                        || item.getName().toLowerCase().contains(text.toLowerCase()))
                 .filter(Item::getAvailable)
-                .filter(item -> item.getDescription() != null
-                        && item.getDescription().toLowerCase().contains(text.toLowerCase())
-                        || item.getName() != null
-                        && item.getName().toLowerCase().contains(text.toLowerCase()))
                 .collect(Collectors.toList());
     }
 }

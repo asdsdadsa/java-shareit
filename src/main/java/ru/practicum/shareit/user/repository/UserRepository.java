@@ -8,12 +8,9 @@ public interface UserRepository {
 
     User createUser(User user);
 
-
     User patchUser(User user, Integer userId);
 
-
     User userById(Integer userId);
-
 
     List<User> getUsers();
 

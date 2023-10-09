@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getUsers() {   // конвертация в дто идет в этом классе поэтому тут и логика хоть она и побольше
+    public List<UserDto> getUsers() {
         List<UserDto> userDtoList = new ArrayList<>();
         for (User user : userService.getUsers()) {
             userDtoList.add(userMapper.toUserDto(user));
