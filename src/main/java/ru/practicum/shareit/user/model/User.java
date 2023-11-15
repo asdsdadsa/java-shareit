@@ -17,8 +17,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(unique = true)    // unique чтобы не duplicate
+    @Column(name = "email", nullable = false, unique = true)    // unique чтобы не duplicate
     private String email;
 }
