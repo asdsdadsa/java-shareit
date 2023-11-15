@@ -78,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDtoFull approveBooking(Integer bookingId, Integer userId, Boolean approved) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("booking с id " + bookingId + " не существует"));
 
-        if (booking.getItem().getOwner().getId() != userId) {    // !!!
+        if (!booking.getItem().getOwner().getId().equals(userId)) {    // !!!
             throw new NotFoundException("Только владелец может менять статус.");
         }
 
@@ -101,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("booking с id " + bookingId + " не существует"));
 
-        if (booking.getBooker().getId() != userId && booking.getItem().getOwner().getId() != userId) {                   // !!!
+        if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwner().getId().equals(userId)) {                   // !!!
             throw new NotFoundException("Невозможно для пользователя с таким id " + userId + ".");
         } else {
             return toBookingDto(booking);
