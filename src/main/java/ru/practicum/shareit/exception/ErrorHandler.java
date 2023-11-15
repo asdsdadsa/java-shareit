@@ -3,8 +3,10 @@ package ru.practicum.shareit.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-public class ErrorHandler { // на логику не влияет создан только для пользователей
+@RestControllerAdvice
+public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -18,9 +20,9 @@ public class ErrorHandler { // на логику не влияет создан 
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler
+/*    @ExceptionHandler           // ЕСЛИ ОСТАВЛЯТЬ ЭТУ СТРОКУ БУДЕТ САМО АВТОМАТОМ 500 ПРОКАТЬ ПРИ @NOTNULL @EMAIL И @VALID В контроллере ОСТОРОЖНО
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
         return new ErrorResponse(e.getMessage());
-    }
+    }*/
 }
