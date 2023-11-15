@@ -136,7 +136,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getItems(Integer userId) {
 
-        List<ItemDto> ItemDtoList = new ArrayList<>();
+        List<ItemDto> itemDtoList = new ArrayList<>();
 
         for (ItemDto itemDto : toItemDtoList(itemRepository.findByOwnerId(userId))) {
 
@@ -155,10 +155,10 @@ public class ItemServiceImpl implements ItemService {
                 itemDto.setNextBooking(null);
             }
 
-            ItemDtoList.add(itemDto);
+            itemDtoList.add(itemDto);
         }
 
-        for (ItemDto itemDto : ItemDtoList) {
+        for (ItemDto itemDto : itemDtoList) {
 
             List<Comment> commentList = commentRepository.findAllByItemId(itemDto.getId());
 
@@ -169,7 +169,7 @@ public class ItemServiceImpl implements ItemService {
             }
         }
 
-        return ItemDtoList;
+        return itemDtoList;
     }
 
     @Transactional

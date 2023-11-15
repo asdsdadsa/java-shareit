@@ -27,12 +27,12 @@ public class CommentMapper {
         return comment;
     }
 
-    public static List<CommentDto> toCommentDtoList(Iterable<Comment> comments) {
-        List<CommentDto> result = new ArrayList<>();
+    public static List<CommentDto> toCommentDtoList(List<Comment> comments) {
+        List<CommentDto> commentDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
-            result.add(toCommentDto(comment));
+            commentDtoList.add(toCommentDto(comment));
         }
-        return result;
+        return commentDtoList;
     }
 }
