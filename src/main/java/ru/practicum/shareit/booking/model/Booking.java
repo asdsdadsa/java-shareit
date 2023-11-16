@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "bookings")
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)  // дает всем полям private
+@FieldDefaults(level = AccessLevel.PRIVATE)  // дает всем полям private
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
