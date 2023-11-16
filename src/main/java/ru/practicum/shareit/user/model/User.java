@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
-@Builder
+@Data                           // Привет. Делал это ТЗ недели 3). Помогли много с мапингом, запросными методами, комментариями и с get методами.
+@Builder                        // Но вроде все получилось логично. Остальные // примечания для себя оставил.
 @Entity
 @NoArgsConstructor           // !!!
 @AllArgsConstructor           // !!!
