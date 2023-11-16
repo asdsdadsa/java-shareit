@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.mapper;
 
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoFull;
 import ru.practicum.shareit.booking.model.Booking;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)     // по совету наставника для всех мап классов
 public class BookingMapper {
 
 

@@ -1,11 +1,15 @@
 package ru.practicum.shareit.item.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)    // по совету наставника для всех мап классов
 public class CommentMapper {
 
 
