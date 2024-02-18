@@ -1,23 +1,36 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
 @Data
 @Builder
+@Entity
+@NoArgsConstructor           // ТРЕБОВАЛОСЬ ДЛЯ PATCH
+@AllArgsConstructor           // ТРЕБОВАЛОСЬ ДЛЯ PATCH
+@Table(name = "items")
 public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column        // nullable = false мб надо
     private Integer id;
-    @NotNull
-    @NotBlank
+    @Column
     private String name;
-    @NotNull
+    @Column
     private String description;
-    @NotNull
+    @Column(name = "is_available") // при Boolean надо is
     private Boolean available;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")     // manytoone связи и JoinColumn
     private User owner;
-    private String request;
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
+    // ЕСЛИ ПРОБЛЕМА ЛОГИ ТРЕБУЮТСЯ
 }

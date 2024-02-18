@@ -1,59 +1,51 @@
 package ru.practicum.shareit.user.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    private UserMapper userMapper;
-
-    @Autowired
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
+
     @PostMapping
-    public UserDto createUser(@Valid @RequestBody UserDto userDto) {
-        User user = userService.createUser(userMapper.toUser(userDto));
-        return userMapper.toUserDto(user);                 // return именно так return userService.createUser(user);
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        log.info("User создан, " + userDto);
+        return userService.createUser(userDto);                 // return именно так return userService.createUser(userDto);
     }
 
     @PatchMapping("/{userId}")
-    public UserDto patchUser(@RequestBody UserDto userDto, @PathVariable Integer userId) {  // !!! @Valid может ломать осторожно
-        User user = userService.patchUser(userMapper.toUser(userDto), userId);
-        return userMapper.toUserDto(user);
+    public UserDto patchUser(@RequestBody UserDto userDto, @PathVariable Integer userId) {  //  @Valid может ломать осторожно
+        log.info("User обновлен, " + userDto);
+        return userService.patchUser(userDto, userId);
     }
 
     @GetMapping("/{userId}")
     public UserDto userById(@PathVariable Integer userId) {
-        return userMapper.toUserDto(userService.userById(userId));
-
+        log.info("Показан user с " + userId + " id.");
+        return userService.userById(userId);
     }
 
     @GetMapping
     public List<UserDto> getUsers() {
-        List<UserDto> userDtoList = new ArrayList<>();
-        for (User user : userService.getUsers()) {
-            userDtoList.add(userMapper.toUserDto(user));
-        }
-        return userDtoList;
+        log.info("Показаны пользователи.");
+        return userService.getUsers();
     }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Integer userId) {
+        log.info("Удален user с " + userId + " id.");
         userService.deleteUser(userId);
     }
 }

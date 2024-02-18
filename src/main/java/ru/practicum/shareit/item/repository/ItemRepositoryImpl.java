@@ -1,3 +1,4 @@
+/*
 package ru.practicum.shareit.item.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,9 @@ public class ItemRepositoryImpl implements ItemRepository {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
         item.setId(id++);
-        item.setOwner(userService.userById(userId));
+*/
+/*        item.setOwner(userService.userById(userId));*//*
+
         items.put(item.getId(), item);
         return item;
     }
@@ -98,4 +101,4 @@ public class ItemRepositoryImpl implements ItemRepository {
                 .filter(Item::getAvailable)
                 .collect(Collectors.toList());
     }
-}
+}*/

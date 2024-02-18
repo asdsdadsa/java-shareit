@@ -1,17 +1,24 @@
 package ru.practicum.shareit.user.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
-@Data
+@Data                           // Подправил.
 @Builder
-public class User {        // Привет, первое ТЗ проекта, а у меня уже проблемы)
-    private Integer id;    // Всю логику специально для удобства как в прошлом ТЗ (делал методы по его примеру) поместил в Repository.
-    private String name;   // Не понял как без throw new ResponseStatusException(HttpStatus.NOT_FOUND); (нашел в гугле) сделать patchItem() и createItem()
-    @Email                 // Так как там выходит ошибка 500 а мне требуется 404
-    @NotNull
-    private String email;  // примечания в других местах кода это для меня.
-}                          // C маппером только в этом ТЗ познакомился и пока делал его идентичным с обычным классом чтобы не путаться.
+@Entity
+@NoArgsConstructor           // !!!
+@AllArgsConstructor           // !!!
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name", nullable = false)
+    private String name;
+    @Column(name = "email", nullable = false, unique = true)    // unique чтобы не duplicate
+    private String email;
+}
