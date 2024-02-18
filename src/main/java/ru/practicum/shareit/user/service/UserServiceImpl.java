@@ -18,7 +18,6 @@ import static ru.practicum.shareit.user.mapper.UserMapper.toUserDto;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

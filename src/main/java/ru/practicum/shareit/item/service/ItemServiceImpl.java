@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
@@ -14,6 +16,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
@@ -33,7 +36,6 @@ import static ru.practicum.shareit.item.mapper.ItemMapper.*;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
@@ -45,12 +47,17 @@ public class ItemServiceImpl implements ItemService {
 
     private final UserService userService;
 
-    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository, BookingRepository bookingRepository, CommentRepository commentRepository, UserService userService) {
+    private final ItemRequestRepository itemRequestRepository;
+
+    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository, BookingRepository bookingRepository,
+                           CommentRepository commentRepository, UserService userService, ItemRequestRepository itemRequestRepository) {
+
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
         this.userService = userService;
+        this.itemRequestRepository = itemRequestRepository;
     }
 
 
@@ -68,6 +75,12 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с id = " + userId + " не существует"));
         Item item = toItem(itemDto);
         item.setOwner(user);
+
+
+        if (itemDto.getRequestId() != null) {                        // ТЗ 15
+            item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).get()); // ТЗ 15
+        } // ТЗ 15
+
         itemRepository.save(item);
         return toItemDto(item);       // ЕСЛИ ТАК ТО ДАЕТ 500  return toItemDto((itemRepository.save(toItem(itemDto))));
     }
@@ -103,6 +116,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи с id " + itemId + " не существует"));
         ItemDto itemDto = toItemDto(item);
 
+
         if (item.getOwner().getId().equals(userId)) {
 
             Optional<Booking> lastBooking = bookingRepository.findFirstByItemIdAndStatusAndStartBeforeOrderByStartDesc(itemId, Status.APPROVED, LocalDateTime.now());
@@ -134,11 +148,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public List<ItemDto> getItems(Integer userId) {
+    public List<ItemDto> getItems(Integer userId, Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from, size);
 
         List<ItemDto> itemDtoList = new ArrayList<>();
 
-        for (ItemDto itemDto : toItemDtoList(itemRepository.findByOwnerId(userId))) {
+        for (ItemDto itemDto : toItemDtoList(itemRepository.findByOwnerId(userId, pageable))) {
 
             Optional<Booking> lastBooking = bookingRepository.findFirstByItemIdAndStatusAndStartBeforeOrderByStartDesc(itemDto.getId(), Status.APPROVED, LocalDateTime.now());
             Optional<Booking> nextBooking = bookingRepository.findFirstByItemIdAndStatusAndStartAfterOrderByStartAsc(itemDto.getId(), Status.APPROVED, LocalDateTime.now());
@@ -174,9 +189,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public List<ItemDto> search(String text) {
+    public List<ItemDto> search(String text, Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from, size);
+
         if (text.isBlank()) return emptyList();
-        return itemRepository.search(text)
+        return itemRepository.search(text, pageable)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(toList());

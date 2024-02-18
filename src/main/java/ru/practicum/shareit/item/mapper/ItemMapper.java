@@ -13,21 +13,15 @@ import java.util.List;
 public class ItemMapper {
 
     public static ItemDto toItemDto(Item item) {
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
+        ItemDto itemDto = ItemDto.builder().id(item.getId()).name(item.getName()).description(item.getDescription()).available(item.getAvailable()).build();
+        if (item.getRequest() != null) {    // ТЗ 15
+            itemDto.setRequestId(item.getRequest().getId()); // ТЗ 15
+        } // ТЗ 15
+        return itemDto;
     }
 
     public static Item toItem(ItemDto itemDto) {
-        return Item.builder()
-                .id(itemDto.getId())
-                .name(itemDto.getName())
-                .description(itemDto.getDescription())
-                .available(itemDto.getAvailable())
-                .build();
+        return Item.builder().id(itemDto.getId()).name(itemDto.getName()).description(itemDto.getDescription()).available(itemDto.getAvailable()).build();
     }
 
     public static List<ItemDto> toItemDtoList(List<Item> items) {
