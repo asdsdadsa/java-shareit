@@ -11,6 +11,8 @@ import ru.practicum.shareit.booking.dto.BookingDtoFull;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -22,92 +24,50 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class BookingServiceImplTest {
-
     @Autowired
     private BookingService bookingService;
-
     @MockBean
     private UserRepository userRepository;
-
     @MockBean
     private ItemRepository itemRepository;
-
     @MockBean
     private BookingRepository bookingRepository;
-
-
     private User userFirst;
-
     private User secondUser;
-
     private Item item;
-
     private Booking bookingFirst;
-
     private Booking bookingSecond;
-
     private BookingDto bookingDto;
 
     @BeforeEach
     void setUp() {  // ПОРЯДОК СОЗДАНИЯ ОБЪЕКТОВ ОЧЕНЬ ЗДЕСЬ ВАЖЕН!
 
-        userFirst = User.builder()
-                .id(1)
-                .name("John")
-                .email("john.doe@mail.com")
-                .build();
+        userFirst = User.builder().id(1).name("John").email("john.doe@mail.com").build();
 
-        secondUser = User.builder()
-                .id(2)
-                .name("NameTest")
-                .email("test@mail.ru")
-                .build();
+        secondUser = User.builder().id(2).name("NameTest").email("test@mail.ru").build();
 
-        item = Item.builder()
-                .id(1)
-                .name("ItemTest")
-                .description("DescriptionTest")
-                .available(true)
-                .owner(userFirst)
-                .build();
+        item = Item.builder().id(1).name("ItemTest").description("DescriptionTest").available(true).owner(userFirst).build();
 
-        bookingFirst = Booking.builder()
-                .id(1)
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusHours(1))
-                .item(item)
-                .booker(userFirst)
-                .status(Status.APPROVED)
-                .build();
+        bookingFirst = Booking.builder().id(1).start(LocalDateTime.now()).end(LocalDateTime.now().plusHours(1)).item(item).booker(userFirst).status(Status.APPROVED).build();
 
 
-        bookingSecond = Booking.builder()
-                .id(2)
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusHours(1))
-                .item(item)
-                .booker(userFirst)
-                .status(Status.WAITING)
-                .build();
+        bookingSecond = Booking.builder().id(2).start(LocalDateTime.now()).end(LocalDateTime.now().plusHours(1)).item(item).booker(userFirst).status(Status.WAITING).build();
 
         bookingDto = BookingDto.builder()     // создаю сам так toBookingDto работает с BookingDtoFull
-                .itemId(1)
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusHours(1))
-                .status(Status.APPROVED)
-                .build();
+                .itemId(1).start(LocalDateTime.now()).end(LocalDateTime.now().plusHours(1)).status(Status.APPROVED).build();
 
     }
 
 
     @Test
-    void createBooking() {
+    void createBookingTest() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.ofNullable(item));
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(secondUser));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingFirst);
@@ -119,11 +79,38 @@ class BookingServiceImplTest {
 
 
         verify(bookingRepository, times(1)).save(any(Booking.class));
-
     }
 
     @Test
-    void approveBooking() {
+    void createBookingWrongOwnerTest() {
+        when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(userFirst));
+
+        assertThrows(NotFoundException.class, () -> bookingService.createBooking(bookingDto, anyInt()));
+    }
+
+    @Test
+    void createBookingItemBookedTest() {
+        item.setAvailable(false);
+
+        when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(secondUser));
+
+        assertThrows(ValidationException.class, () -> bookingService.createBooking(bookingDto, anyInt()));
+    }
+
+    @Test
+    void createBookingNotValidEndTest() {
+        when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(secondUser));
+
+        bookingDto.setEnd(LocalDateTime.of(2000, 9, 12, 0, 0));
+
+        assertThrows(ValidationException.class, () -> bookingService.createBooking(bookingDto, anyInt()));
+    }
+
+    @Test
+    void approveBookingTest() {
         BookingDtoFull bookingDtoFullCreated;
 
         when(bookingRepository.findById((anyInt()))).thenReturn(Optional.ofNullable(bookingSecond));
@@ -142,7 +129,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void bookingById() {
+    void bookingByIdTest() {
         when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(bookingFirst));
 
         BookingDtoFull bookingDtoFullCreated = bookingService.bookingById(userFirst.getId(), bookingFirst.getId());
@@ -155,7 +142,15 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void bookingByUser() {
+    void bookingByIdNotFoundTest() {      // Тест на неверное условие
+        when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(bookingFirst));
+
+        assertThrows(NotFoundException.class, () -> bookingService.bookingById(bookingFirst.getId(), 99));
+    }
+
+
+    @Test
+    void bookingByUserTest() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(userFirst));
         when(bookingRepository.findAllByBookerIdOrderByStartDesc(anyInt(), any(PageRequest.class))).thenReturn(List.of(bookingFirst));
 
@@ -214,7 +209,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllBooking() {
+    void getAllBookingTest() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(userFirst));
         when(bookingRepository.findAllByItemOwnerIdOrderByStartDesc(anyInt(), any(PageRequest.class))).thenReturn(List.of(bookingFirst));
 

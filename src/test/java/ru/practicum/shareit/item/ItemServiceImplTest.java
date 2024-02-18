@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -190,4 +191,28 @@ class ItemServiceImplTest {
 
         verify(commentRepository, times(1)).save(any(Comment.class));
     }
+
+    @Test
+    void searchItemTest() {
+        when(itemRepository.search(anyString(), any(Pageable.class))).thenReturn(List.of(item));
+
+        List<ItemDto> searchedItems = itemService.search("qwe", 5, 15);
+
+        assertEquals(item.getId(), searchedItems.get(0).getId());
+        assertEquals(item.getName(), searchedItems.get(0).getName());
+        assertEquals(item.getDescription(), searchedItems.get(0).getDescription());
+        assertEquals(item.getAvailable(), searchedItems.get(0).getAvailable());
+
+        verify(itemRepository, times(1)).search(anyString(), any(Pageable.class));
+    }
+
+    @Test
+    void searchItemEmptyText() { // Тест на неверное условие
+        List<ItemDto> itemDtoList = itemService.search("", 5, 15);
+
+        assertTrue(itemDtoList.isEmpty());
+
+        verify(itemRepository, times(0)).search(anyString(), any(Pageable.class));
+    }
+
 }
