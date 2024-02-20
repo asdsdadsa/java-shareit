@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // @UtilityClass генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
+@UtilityClass
 public class ItemMapper {
 
     public static ItemDto toItemDto(Item item) {
