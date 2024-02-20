@@ -6,7 +6,8 @@ import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.Collections;
 
-@UtilityClass //генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
+@UtilityClass
+//генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
 public class ItemRequestMapper {      // конструктор в мапперах не нужен
 
     public ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {

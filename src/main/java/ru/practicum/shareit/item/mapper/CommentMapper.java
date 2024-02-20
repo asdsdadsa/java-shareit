@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
@@ -10,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@UtilityClass //генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
+@UtilityClass
+//генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
 public class CommentMapper {     // конструктор в мапперах не нужен
 
 
