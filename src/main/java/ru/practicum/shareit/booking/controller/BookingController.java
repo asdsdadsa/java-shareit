@@ -21,7 +21,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDtoFull createBooking(@Valid @RequestBody BookingDto bookingDto, @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        return bookingService.createBooking(bookingDto, userId);        // @RequestHeader("X-Sharer-User-Id") для заголовок запроса
+        return bookingService.createBooking(bookingDto, userId);        // @RequestHeader("X-Sharer-User-Id") для заголовок запроса.
     }
 
     @PatchMapping({"{bookingId}"})  // ?state={state} не пишется
