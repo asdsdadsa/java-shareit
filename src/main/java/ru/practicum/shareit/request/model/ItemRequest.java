@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "requests")
-public class ItemRequest {      // Привет, везде кроме этого класса пояснения для себе оставлял на них можешь не обращать внимание (отстаю потом придется пересматривать для большего понимания).
-    @Id                          // Пагинацию вроде бы добавил везде, где говорится в ТЗ. Тесты такого типа первый раз делаю (кроме теории) так что, может быть, будут странности, хотя я перепроверял и не заметил.
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ItemRequest {      // Подправил. Убрал аннотации логов (во время написания кода логи использую и забываю убрать).
+    @Id                          // Заменил в мапперах на @UtilityClass.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  //  @FieldDefaults разобрал.
     @Column
     private Integer id;
     @Column

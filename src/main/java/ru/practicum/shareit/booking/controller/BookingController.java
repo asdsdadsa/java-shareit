@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/bookings")
-@Slf4j
 public class BookingController {
 
     private final BookingService bookingService;

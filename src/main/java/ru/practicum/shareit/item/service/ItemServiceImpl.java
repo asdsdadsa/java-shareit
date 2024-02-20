@@ -34,7 +34,6 @@ import static ru.practicum.shareit.booking.mapper.BookingMapper.toBookingDto;
 import static ru.practicum.shareit.item.mapper.CommentMapper.*;
 import static ru.practicum.shareit.item.mapper.ItemMapper.*;
 
-@Slf4j
 @Service
 public class ItemServiceImpl implements ItemService {
 

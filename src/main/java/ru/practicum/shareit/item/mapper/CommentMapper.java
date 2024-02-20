@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 
@@ -9,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)    // по совету наставника для всех мап классов
-public class CommentMapper {
+@UtilityClass //генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
+public class CommentMapper {     // конструктор в мапперах не нужен
 
 
-    public static CommentDto toCommentDto(Comment comment) {
+    public CommentDto toCommentDto(Comment comment) {
         CommentDto commentDto = CommentDto.builder()
                 .id(comment.getId())
                 .text(comment.getText())
@@ -23,7 +24,7 @@ public class CommentMapper {
         return commentDto;
     }
 
-    public static Comment toComment(CommentDto commentDto) {
+    public Comment toComment(CommentDto commentDto) {
         Comment comment = Comment.builder()
                 .id(commentDto.getId())
                 .text(commentDto.getText())
@@ -31,7 +32,7 @@ public class CommentMapper {
         return comment;
     }
 
-    public static List<CommentDto> toCommentDtoList(List<Comment> comments) {
+    public List<CommentDto> toCommentDtoList(List<Comment> comments) {
         List<CommentDto> commentDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {

@@ -25,7 +25,6 @@ import static ru.practicum.shareit.booking.mapper.BookingMapper.*;
 import static ru.practicum.shareit.util.Status.*;
 
 @Service
-@Slf4j
 public class BookingServiceImpl implements BookingService {
 
     private final UserRepository userRepository;
