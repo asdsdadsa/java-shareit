@@ -1,15 +1,12 @@
 
 package ru.practicum.shareit.user.mapper;
 
-import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-@UtilityClass
-//генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
-public class UserMapper {        // конструктор в мапперах не нужен
+public class UserMapper {
 
-    public UserDto toUserDto(User user) {
+    public static UserDto toUserDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -17,7 +14,7 @@ public class UserMapper {        // конструктор в мапперах �
                 .build();
     }
 
-    public User toUser(UserDto userDto) {
+    public static User toUser(UserDto userDto) {
         return User.builder()
                 .id(userDto.getId())
                 .name(userDto.getName())

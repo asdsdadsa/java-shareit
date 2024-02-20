@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.mapper;
 
-import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 
@@ -8,12 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@UtilityClass
-//генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
-public class CommentMapper {     // конструктор в мапперах не нужен
+public class CommentMapper {
 
 
-    public CommentDto toCommentDto(Comment comment) {
+    public static CommentDto toCommentDto(Comment comment) {
         CommentDto commentDto = CommentDto.builder()
                 .id(comment.getId())
                 .text(comment.getText())
@@ -23,7 +20,7 @@ public class CommentMapper {     // конструктор в мапперах �
         return commentDto;
     }
 
-    public Comment toComment(CommentDto commentDto) {
+    public static Comment toComment(CommentDto commentDto) {
         Comment comment = Comment.builder()
                 .id(commentDto.getId())
                 .text(commentDto.getText())
@@ -31,7 +28,7 @@ public class CommentMapper {     // конструктор в мапперах �
         return comment;
     }
 
-    public List<CommentDto> toCommentDtoList(List<Comment> comments) {
+    public static List<CommentDto> toCommentDtoList(List<Comment> comments) {
         List<CommentDto> commentDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {

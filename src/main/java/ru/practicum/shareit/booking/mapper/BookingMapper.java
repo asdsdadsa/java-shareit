@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.mapper;
 
 
-import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoFull;
 import ru.practicum.shareit.booking.model.Booking;
@@ -11,12 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@UtilityClass
-//генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
-public class BookingMapper {      // конструктор в мапперах не нужен
+public class BookingMapper {
 
 
-    public BookingDtoFull toBookingDto(Booking booking) {
+    public static BookingDtoFull toBookingDto(Booking booking) {
         return BookingDtoFull.builder()
                 .id(booking.getId())
                 .start(booking.getStart())
@@ -28,7 +25,7 @@ public class BookingMapper {      // конструктор в мапперах 
                 .build();
     }
 
-    public Booking toBooking(BookingDto bookingDto) {
+    public static Booking toBooking(BookingDto bookingDto) {
         Booking booking = Booking.builder()
                 .start(bookingDto.getStart())
                 .end(bookingDto.getEnd())
@@ -42,7 +39,7 @@ public class BookingMapper {      // конструктор в мапперах 
         return booking;
     }
 
-    public List<BookingDtoFull> toBookingDtoList(List<Booking> bookings) {
+    public static List<BookingDtoFull> toBookingDtoList(List<Booking> bookings) {
         List<BookingDtoFull> bookingList = new ArrayList<>();
 
         for (Booking booking : bookings) {

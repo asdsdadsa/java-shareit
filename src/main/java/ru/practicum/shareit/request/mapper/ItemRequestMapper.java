@@ -1,16 +1,13 @@
 package ru.practicum.shareit.request.mapper;
 
-import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.Collections;
 
-@UtilityClass
-//генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
-public class ItemRequestMapper {      // конструктор в мапперах не нужен
+public class ItemRequestMapper {
 
-    public ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
+    public static ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
         return ItemRequest.builder()
                 .id(itemRequestDto.getId())
                 .description(itemRequestDto.getDescription())
@@ -19,7 +16,7 @@ public class ItemRequestMapper {      // конструктор в маппер�
                 .build();
     }
 
-    public ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
+    public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
         return ItemRequestDto.builder()
                 .id(itemRequest.getId())
                 .description(itemRequest.getDescription())
