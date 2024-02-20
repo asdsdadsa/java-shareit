@@ -6,8 +6,8 @@ import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.Collections;
 
-@UtilityClass
-public class ItemRequestMapper {
+@UtilityClass  // @UtilityClass генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
+public class ItemRequestMapper { // Так же Jacoco не будет требовать тестировать его.
 
     public static ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
         return ItemRequest.builder()

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // @UtilityClass генерирует приватный конструктор, который создаёт исключение, окончательно выводит класс и делает все методы статическими.
-@UtilityClass
+@UtilityClass          // Так же Jacoco не будет требовать тестировать его.
 public class ItemMapper {
 
     public static ItemDto toItemDto(Item item) {

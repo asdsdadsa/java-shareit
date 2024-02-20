@@ -19,9 +19,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "requests")
 public class ItemRequest {      // Подправил. Убрал аннотации логов (во время написания кода логи использую и забываю убрать).
-    @Id                         //  Разобрал что такое @UtilityClass, но так как конструктор в мапперах мне вообще не требовался, я так понимаю,
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //  ни в @NoArgsConstructor(access = AccessLevel.PRIVATE) ни в @UtilityClass смысла особого нет. В моем случае.
+    @Id                         //  Разобрал что такое @UtilityClass. Нашел то, что он делает методы static,но у меня нет.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Так что оставил static в методах (может быть версия lombok не та что нужно).
     @Column                                                       //  @FieldDefaults разобрал.
     private Integer id;
     @Column
