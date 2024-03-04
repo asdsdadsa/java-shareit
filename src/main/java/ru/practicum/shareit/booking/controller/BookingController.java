@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoFull;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/bookings")
-@Slf4j
 public class BookingController {
 
     private final BookingService bookingService;
@@ -21,10 +19,9 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-
     @PostMapping
     public BookingDtoFull createBooking(@Valid @RequestBody BookingDto bookingDto, @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        return bookingService.createBooking(bookingDto, userId);        // @RequestHeader("X-Sharer-User-Id") для заголовок запроса
+        return bookingService.createBooking(bookingDto, userId);        // @RequestHeader("X-Sharer-User-Id") для заголовок запроса.
     }
 
     @PatchMapping({"{bookingId}"})  // ?state={state} не пишется
@@ -38,12 +35,14 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDtoFull> bookingByUser(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestParam(defaultValue = "ALL", required = false) String state) {
-        return bookingService.bookingByUser(userId, state); //  required = false значит не обязателен
+    public List<BookingDtoFull> bookingByUser(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestParam(defaultValue = "ALL", required = false) String state,
+                                              @RequestParam(defaultValue = "0") Integer from, @RequestParam(defaultValue = "20") Integer size) {
+        return bookingService.bookingByUser(userId, state, from, size); //  required = false значит не обязателен
     }
 
     @GetMapping("/owner")        // !!!
-    public List<BookingDtoFull> getAllBooking(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestParam(defaultValue = "ALL", required = false) String state) {
-        return bookingService.getAllBooking(userId, state);
+    public List<BookingDtoFull> getAllBooking(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestParam(defaultValue = "ALL", required = false) String state,
+                                              @RequestParam(defaultValue = "0") Integer from, @RequestParam(defaultValue = "20") Integer size) {
+        return bookingService.getAllBooking(userId, state, from, size);
     }
 }

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -27,7 +27,7 @@ public class Item {
     @Column(name = "is_available") // при Boolean надо is
     private Boolean available;
     @ManyToOne
-    @JoinColumn(name = "owner_id")     // manytoone связи и JoinColumn
+    @JoinColumn(name = "owner_id")     // manyToOne связи и JoinColumn
     private User owner;
     @ManyToOne
     @JoinColumn(name = "request_id")

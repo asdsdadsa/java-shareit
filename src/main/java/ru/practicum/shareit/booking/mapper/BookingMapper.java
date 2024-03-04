@@ -1,17 +1,17 @@
 package ru.practicum.shareit.booking.mapper;
 
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoFull;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.util.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)     // по совету наставника для всех мап классов
+@UtilityClass
 public class BookingMapper {
 
 
@@ -28,11 +28,17 @@ public class BookingMapper {
     }
 
     public static Booking toBooking(BookingDto bookingDto) {
-        return Booking.builder()
+        Booking booking = Booking.builder()
                 .start(bookingDto.getStart())
                 .end(bookingDto.getEnd())
-                .status(bookingDto.getStatus())
                 .build();
+
+        if (bookingDto.getStatus() == null) {
+            booking.setStatus(Status.WAITING);
+        } else {
+            booking.setStatus(bookingDto.getStatus());
+        }
+        return booking;
     }
 
     public static List<BookingDtoFull> toBookingDtoList(List<Booking> bookings) {
