@@ -11,6 +11,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
+import static ru.practicum.shareit.util.Constants.USER_HEADER;
+
 /**
  * TODO Sprint add-item-requests.
  */
@@ -24,23 +26,23 @@ public class ItemRequestController {
 
 
     @PostMapping
-    public ResponseEntity<Object> createRequest(@RequestBody @Valid ItemRequestDto itemRequestDto, @RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public ResponseEntity<Object> createRequest(@RequestBody @Valid ItemRequestDto itemRequestDto, @RequestHeader(USER_HEADER) Integer userId) {
         return itemRequestClient.createRequest(itemRequestDto, userId);
     }
 
     @GetMapping({"/{requestId}"})
-    public ResponseEntity<Object> requestById(@PathVariable Integer requestId, @RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public ResponseEntity<Object> requestById(@PathVariable Integer requestId, @RequestHeader(USER_HEADER) Integer userId) {
         return itemRequestClient.requestById(requestId, userId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> getRequests(@RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public ResponseEntity<Object> getRequests(@RequestHeader(USER_HEADER) Integer userId) {
         return itemRequestClient.getRequests(userId);
     }
 
 
     @GetMapping({"/all"})     // ВНИМАТЕЛЬНО ЧТОБЫ НЕ ПОСТАВИТЬ {} КОГДА НЕ НАДО
-    public ResponseEntity<Object> getAllRequests(@RequestHeader("X-Sharer-User-Id") Integer userId, @PositiveOrZero @RequestParam(defaultValue = "0")
+    public ResponseEntity<Object> getAllRequests(@RequestHeader(USER_HEADER) Integer userId, @PositiveOrZero @RequestParam(defaultValue = "0")
     Integer from, @Positive @RequestParam(defaultValue = "10") Integer size) {
         return itemRequestClient.getAllRequests(userId, from, size);
     }

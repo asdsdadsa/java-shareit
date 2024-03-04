@@ -13,6 +13,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
+import static ru.practicum.shareit.util.Constants.USER_HEADER;
+
 
 @Controller
 @RequestMapping(path = "/bookings")
@@ -24,23 +26,23 @@ public class BookingController {
 
 
     @PostMapping
-    public ResponseEntity<Object> createBooking(@RequestBody @Valid BookingDto bookingDto, @RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public ResponseEntity<Object> createBooking(@RequestBody @Valid BookingDto bookingDto, @RequestHeader(USER_HEADER) Integer userId) {
         return bookingClient.createBooking(bookingDto, userId);
     }
 
     @PatchMapping({"/{bookingId}"})
-    public ResponseEntity<Object> approveBooking(@PathVariable Integer bookingId, @RequestHeader("X-Sharer-User-Id") Integer userId,
+    public ResponseEntity<Object> approveBooking(@PathVariable Integer bookingId, @RequestHeader(USER_HEADER) Integer userId,
                                                  @RequestParam Boolean approved) {
         return bookingClient.approveBooking(bookingId, userId, approved);
     }
 
     @GetMapping({"/{bookingId}"})
-    public ResponseEntity<Object> bookingById(@PathVariable Integer bookingId, @RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public ResponseEntity<Object> bookingById(@PathVariable Integer bookingId, @RequestHeader(USER_HEADER) Integer userId) {
         return bookingClient.bookingById(bookingId, userId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> bookingByUser(@RequestHeader("X-Sharer-User-Id") Integer userId,
+    public ResponseEntity<Object> bookingByUser(@RequestHeader(USER_HEADER) Integer userId,
                                                 @RequestParam(defaultValue = "ALL", required = false) String state,
                                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                 @Positive @RequestParam(defaultValue = "20") Integer size) {
@@ -50,7 +52,7 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> getAllBooking(@RequestHeader("X-Sharer-User-Id") Integer userId,
+    public ResponseEntity<Object> getAllBooking(@RequestHeader(USER_HEADER) Integer userId,
                                                 @RequestParam(defaultValue = "ALL", required = false) String state,
                                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                 @Positive @RequestParam(defaultValue = "20") Integer size) {
